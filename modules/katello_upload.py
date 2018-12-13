@@ -164,7 +164,7 @@ def main():
     elif entity_dict['repository'].content_type == "file":
         h = hashlib.sha256()
         with open(entity_dict['src'], "rb") as f:
-            for chunk in iter(lambda: f.read(4096), b""):
+            for chunk in iter(lambda: f.read(2500), b""):
                 h.update(chunk)
         checksum = h.hexdigest()
         name = os.path.basename(entity_dict['src'])
