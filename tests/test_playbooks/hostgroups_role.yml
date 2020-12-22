@@ -1,0 +1,34 @@
+---
+- hosts: localhost
+  collections:
+    - theforeman.foreman
+  gather_facts: false
+  vars_files:
+    - vars/server.yml
+  tasks:
+    - name: ensure test organization
+      include_tasks: tasks/organization.yml
+      vars:
+        organization_name: "Test Organization"
+        organization_state: "present"
+
+- hosts: tests
+  collections:
+    - theforeman.foreman
+  gather_facts: false
+  vars_files:
+    - vars/server.yml
+  roles:
+    - role: hostgroups
+      vars:
+        username: "{{ foreman_username }}"
+        password: "{{ foreman_password }}"
+        server_url: "{{  foreman_server_url }}"
+        validate_certs: "{{ foreman_validate_certs }}"
+        organization: "Test Organization"
+        foreman_hostgroups:
+          - name: Hostgroup1
+          - name: Hostgroup2
+            parent: Hostgroup1
+          - name: Hostgroup3
+            architecture: "x86_64"
